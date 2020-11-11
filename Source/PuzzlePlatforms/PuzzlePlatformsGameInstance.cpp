@@ -3,6 +3,8 @@
 
 #include "PuzzlePlatformsGameInstance.h"
 #include "Engine/Engine.h"
+#include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -39,4 +41,13 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 	{
 		Engine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("Joining: %s"), *Address));
 	}
+
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+
+	if (!PlayerController)
+	{
+		return;
+	}
+
+	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
